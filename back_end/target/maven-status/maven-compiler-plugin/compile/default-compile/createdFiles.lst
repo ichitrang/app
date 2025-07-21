@@ -1,0 +1,5 @@
+com/example/demo/controller/RegistrationController.class
+com/example/demo/model/User.class
+com/example/demo/SecurityConfig.class
+com/example/demo/RegistrationApplication.class
+com/example/demo/ServletInitializer.class
