@@ -1,21 +1,27 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173") // Add this line
+import com.example.demo.repository.UserRepository;
+import com.example.demo.model.User;
+
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:5173") // change port if different
 public class RegistrationController {
 
     @Autowired
     private UserRepository userRepository;
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody User user) {
-        userRepository.save(user);
-        return "User registered successfully";
+    public User register(@RequestBody User user) {
+        return userRepository.save(user);
+    }
+
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
