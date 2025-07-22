@@ -1,63 +1,80 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [aadhar, setAadhar] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState(false);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!/^\d{12}$/.test(aadhar)) {
-      alert("Invalid Aadhar number. It should be 12 digits.");
+      setError(true);
+      setMessage("Invalid Aadhar number");
       return;
     }
 
     try {
-      await axios.post("http://localhost:8080/api/register", {
-        email,
-        password,
-        aadhar,
+      const res = await fetch("http://localhost:8080/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, aadhar }),
       });
 
-      navigate("/users");
-    } catch (error) {
-      console.error("Registration failed", error);
-      alert("Registration failed. Please try again.");
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem("loggedInUser", JSON.stringify(data));
+        setMessage("Registered successfully!");
+        setError(false);
+        navigate("/users");
+      } else {
+        setMessage(data.message || "Registration failed");
+        setError(true);
+      }
+    } catch (err) {
+      setMessage("Something went wrong");
+      setError(true);
     }
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", marginTop: "100px" }}>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ padding: "20px" }}>
+      <h2>Register</h2>
       <form onSubmit={handleSubmit}>
-        <h2>Register</h2>
         <input
           type="email"
-          placeholder="Email"
           value={email}
+          placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
           required
-        /><br />
+        /><br /><br />
         <input
           type="password"
-          placeholder="Password"
           value={password}
+          placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
           required
-        /><br />
+        /><br /><br />
         <input
           type="text"
-          placeholder="Aadhar Number"
           value={aadhar}
+          placeholder="Aadhar Number"
           onChange={(e) => setAadhar(e.target.value)}
           required
-        /><br />
-        <button type="submit">Register & View Users</button>
+        /><br /><br />
+        <button type="submit">Register</button>
       </form>
-    </div>
+      {message && (
+        <p style={{ color: error ? "red" : "green", marginTop: "10px" }}>{message}</p>
+      )}
+    </motion.div>
   );
 };
 
