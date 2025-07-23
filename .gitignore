@@ -1,5 +1,7 @@
+
 # Ignore node_modules from frontend
 front_end/node_modules/
 
 # Ignore Spring Boot secrets
 back_end/src/main/resources/application.properties
+
