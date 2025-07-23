@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./Login";
-import Users from "./Users";
+import Sign_up from "./Sign_up"; // ✅ matches your actual filename
+import Dashboard from "./Dashboard";
 import Profile from "./Profile";
 
 const App = () => {
@@ -9,7 +10,8 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/users" element={<Users />} />
+        <Route path="/sign_up" element={<Sign_up />} /> {/* ✅ use the correct component */}
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
