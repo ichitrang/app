@@ -1,80 +1,59 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [aadhar, setAadhar] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState(false);
-
+  const [invalidCreds, setInvalidCreds] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!/^\d{12}$/.test(aadhar)) {
-      setError(true);
-      setMessage("Invalid Aadhar number");
-      return;
-    }
-
+  const handleLogin = async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, aadhar }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem("loggedInUser", JSON.stringify(data));
-        setMessage("Registered successfully!");
-        setError(false);
-        navigate("/users");
-      } else {
-        setMessage(data.message || "Registration failed");
-        setError(true);
-      }
-    } catch (err) {
-      setMessage("Something went wrong");
-      setError(true);
+      const res = await axios.post("http://localhost:8080/api/login", { email, password });
+      localStorage.setItem("user", JSON.stringify(res.data));
+      setInvalidCreds(false);
+      navigate("/dashboard");
+    } catch (error) {
+      setInvalidCreds(true);
     }
   };
 
+  const goToSignUp = () => {
+    navigate("/sign_up");
+  };
+
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ padding: "20px" }}>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          value={email}
-          placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        /><br /><br />
-        <input
-          type="password"
-          value={password}
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        /><br /><br />
-        <input
-          type="text"
-          value={aadhar}
-          placeholder="Aadhar Number"
-          onChange={(e) => setAadhar(e.target.value)}
-          required
-        /><br /><br />
-        <button type="submit">Register</button>
-      </form>
-      {message && (
-        <p style={{ color: error ? "red" : "green", marginTop: "10px" }}>{message}</p>
+    <div className="h-screen flex flex-col items-center justify-center bg-gray-100 space-y-4">
+      <h2 className="text-2xl font-bold mb-4">Login</h2>
+
+      <input
+        className="border p-2 w-64"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        className="border p-2 w-64"
+        placeholder="Password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+
+      <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleLogin}>
+        Login
+      </button>
+
+      {invalidCreds && (
+        <div className="flex flex-col items-center">
+          <p className="text-red-600 mt-2">Invalid credentials</p>
+          <button className="text-blue-600 underline mt-2" onClick={goToSignUp}>
+            Sign Up
+          </button>
+        </div>
       )}
-    </motion.div>
+    </div>
   );
 };
 
