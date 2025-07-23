@@ -1,3 +1,6 @@
+com/example/demo/config/WebConfig.class
+com/example/demo/repository/UserRepository.class
+com/example/demo/config/WebConfig$1.class
 com/example/demo/controller/RegistrationController.class
 com/example/demo/model/User.class
 com/example/demo/SecurityConfig.class
