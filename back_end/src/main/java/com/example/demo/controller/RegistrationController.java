@@ -21,6 +21,15 @@ public class RegistrationController {
     // Register user
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
+        if (user.getEmail() == null || user.getPassword() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email and password required");
+        }
+        // Optional: Check if user with email already exists before saving
+        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+        if (existingUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+        }
+
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(savedUser);
     }
@@ -28,6 +37,10 @@ public class RegistrationController {
     // Login user
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User loginUser) {
+        if (loginUser.getEmail() == null || loginUser.getPassword() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email and password required");
+        }
+
         Optional<User> user = userRepository.findByEmailAndPassword(
                 loginUser.getEmail(),
                 loginUser.getPassword()
@@ -36,7 +49,7 @@ public class RegistrationController {
         if (user.isPresent()) {
             return ResponseEntity.ok(user.get());
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
 
