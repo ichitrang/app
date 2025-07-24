@@ -11,9 +11,8 @@ public class User {
 
     private String email;
     private String aadhar;
-    private String password; // ✅ Added password field
+    private String password; 
 
-    // Constructors
     public User() {}
 
     public User(String email, String aadhar, String password) {
@@ -22,7 +21,6 @@ public class User {
         this.password = password;
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }

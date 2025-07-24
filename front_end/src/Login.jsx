@@ -9,7 +9,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    // Basic validation to avoid empty login
     if (!email || !password) {
       setInvalidCreds(true);
       return;
@@ -17,13 +16,10 @@ const Login = () => {
 
     try {
       const res = await axios.post("http://localhost:8080/api/login", { email, password });
-      // Save user data in localStorage
       localStorage.setItem("user", JSON.stringify(res.data));
       setInvalidCreds(false);
-      // Redirect to dashboard after successful login
       navigate("/dashboard");
     } catch (error) {
-      // Show invalid credentials error if login fails
       setInvalidCreds(true);
     }
   };
