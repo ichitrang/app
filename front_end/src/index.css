@@ -6,16 +6,16 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.75; /* 🔥 Good line spacing */
+  line-height: 1.75; 
 }
 
 body {
   margin: 0;
-  background-color: #000000; /* 🖤 Pure black background */
+  background-color: #000000; 
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh; /* 👇 Full screen height */
-  padding: 1rem; /* 🧱 For small screens */
-  color: white; /* default text color (can be overridden) */
+  min-height: 100vh; 
+  padding: 1rem; 
+  color: white; 
 }
