@@ -24,9 +24,25 @@ const SignUp = () => {
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-gray-100">
       <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
-      <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      <input placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" />
-      <button onClick={handleRegister}>Register</button>
+      <input
+        className="mb-2 p-2 border rounded w-64"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        className="mb-4 p-2 border rounded w-64"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        type="password"
+      />
+      <button
+        className="bg-green-500 text-white px-4 py-2 rounded"
+        onClick={handleRegister}
+      >
+        Register
+      </button>
     </div>
   );
 };
