@@ -5,22 +5,43 @@ import axios from "axios";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [invalidCreds, setInvalidCreds] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    // Reset previous errors
+    setError("");
+
+    // ✅ Frontend validation
     if (!email || !password) {
-      setInvalidCreds(true);
+      setError("Email and password are required.");
       return;
     }
 
     try {
-      const res = await axios.post("http://localhost:8080/api/login", { email, password });
-      localStorage.setItem("user", JSON.stringify(res.data));
-      setInvalidCreds(false);
+      setLoading(true);
+
+      const res = await axios.post("http://localhost:8080/api/login", {
+        email,
+        password,
+      });
+
+      // ✅ Store only non-sensitive data
+      localStorage.setItem("user", JSON.stringify({
+        id: res.data.id,
+        email: res.data.email,
+      }));
+
+      setLoading(false);
       navigate("/dashboard");
-    } catch (error) {
-      setInvalidCreds(true);
+    } catch (err) {
+      setLoading(false);
+      if (err.response?.status === 401) {
+        setError("Invalid email or password.");
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -48,15 +69,18 @@ const Login = () => {
       />
 
       <button
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className={`px-4 py-2 rounded text-white ${
+          loading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+        }`}
         onClick={handleLogin}
+        disabled={loading}
       >
-        Login
+        {loading ? "Logging in..." : "Login"}
       </button>
 
-      {invalidCreds && (
-        <div className="flex flex-col items-center">
-          <p className="text-red-600 mt-2">Invalid credentials or empty fields</p>
+      {error && (
+        <div className="flex flex-col items-center mt-2">
+          <p className="text-red-600">{error}</p>
           <button className="text-blue-600 underline mt-2" onClick={goToSignUp}>
             Sign Up
           </button>

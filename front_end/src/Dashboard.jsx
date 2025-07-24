@@ -8,9 +8,10 @@ const Dashboard = () => {
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/users")
+    axios
+      .get("http://localhost:8080/api/users")
       .then((res) => setUsers(res.data))
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("Failed to fetch users:", err));
   }, []);
 
   const goToProfile = () => {
@@ -20,7 +21,10 @@ const Dashboard = () => {
   return (
     <div className="p-8">
       <h1 className="text-2xl mb-4">Welcome, {currentUser?.email}</h1>
-      <button className="bg-blue-500 text-white px-4 py-2 rounded mb-6" onClick={goToProfile}>
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded mb-6"
+        onClick={goToProfile}
+      >
         View My Profile
       </button>
 
