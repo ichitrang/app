@@ -1,7 +1,10 @@
-
 front_end/node_modules/
 
+target/
+back_end/target/
+
+*.log
+.DS_Store
+*.class
+
 back_end/src/main/resources/application.properties
-
-/target/
-
