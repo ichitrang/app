@@ -10,10 +10,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    // Reset previous errors
     setError("");
 
-    // ✅ Frontend validation
     if (!email || !password) {
       setError("Email and password are required.");
       return;
@@ -27,7 +25,6 @@ const Login = () => {
         password,
       });
 
-      // ✅ Store only non-sensitive data
       localStorage.setItem("user", JSON.stringify({
         id: res.data.id,
         email: res.data.email,
